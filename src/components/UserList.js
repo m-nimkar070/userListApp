@@ -24,7 +24,6 @@ const UserList = () => {
       .get("https://jsonplaceholder.typicode.com/users")
       .then((response) => {
         setUsers(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
@@ -104,7 +103,6 @@ const UserList = () => {
 
     setEditID(id);
   };
-  console.log(editId);
 
   //Function to handle the Update functionality
   const handleUpdate = (id) => {
