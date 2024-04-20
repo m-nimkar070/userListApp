@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Pagination from './Pagination';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -11,6 +12,9 @@ const UserList = () => {
   const [updateEmail,setUpdateEmail] = useState("");
   const [updatePhone,setUpdatePhone] = useState("");
   const [editId,setEditID] = useState(-1);
+
+  const itemsPerPage = 3; // Number of items per page
+  const [currentPage, setCurrentPage] = useState(1);
 
 
   useEffect(() => {
@@ -96,6 +100,17 @@ const UserList = () => {
     );
     
   }
+
+  // Function to handle pagination
+  const goToPage = (page) => {
+    setCurrentPage(page);
+  };
+
+  const paginatedUsers = users.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
 
   return (
     <>
@@ -183,7 +198,7 @@ const UserList = () => {
 
               {/* Looping through the array of objects to gererate table data*/}
 
-              {users.map((user) => (
+              {paginatedUsers.map((user) => (
                 user.id ===editId ? 
 
                 // Conditionally rendering for editing the records
@@ -253,7 +268,7 @@ const UserList = () => {
               {/* Mobile view Code */}
 
         <div className="grid grid-cols-1  sm:grid-cols-2 gap-4 md:hidden">
-          {users.map((user) => (
+          {paginatedUsers.map((user) => (
             user.id ===editId ?
             <div className="bg-white overflow-auto p-4 rounded-lg space-y-3 roun-lg shadow"
             key={user.id}>
@@ -310,6 +325,12 @@ const UserList = () => {
             </div>
           ))}
         </div>
+      {/* Pagination component */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(users.length / itemsPerPage)}
+        goToPage={goToPage}
+      />
       </div>
     </>
   );
